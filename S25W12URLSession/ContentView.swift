@@ -1,21 +1,26 @@
-//
-//  ContentView.swift
-//  S25W12URLSession
-//
-//  Created by SIXR on 11/24/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var viewModel = SongViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        List {
+            ForEach(viewModel.songs) { song in
+                VStack(alignment: .leading) {
+                    Text(song.title)
+                        .font(.headline)
+                    Text(song.singer)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
         }
-        .padding()
+        .task {
+            await viewModel.loadSongs()
+        }
+        .refreshable {
+            await viewModel.loadSongs()
+        }
     }
 }
 
