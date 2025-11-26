@@ -54,6 +54,11 @@ struct SongListView: View {
                 }
             }
         }
+        .task {
+            await viewModel.addSong(
+                Song(id: UUID(), title: "test", singer: "singer", rating: 1, lyrics: "lyrics")
+            )
+        }
     }
 }
 

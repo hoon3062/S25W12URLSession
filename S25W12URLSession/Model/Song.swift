@@ -1,6 +1,6 @@
 import Foundation
 
-struct Song: Identifiable, Decodable, Hashable {
+struct Song: Identifiable, Decodable, Encodable, Hashable {
     let id: UUID
     let title: String
     let singer: String
