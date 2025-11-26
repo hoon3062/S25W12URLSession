@@ -26,4 +26,23 @@ final class SupabaseSongRepository: SongRepository {
             throw URLError(.badServerResponse)
         }
     }
+    
+    func deleteSong(_ id: String) async throws {
+        // 주의: eq.value
+        let urlString = "\(SongApiConfig.projectURL)/rest/v1/songs?id=eq.\(id)&apikey=\(SongApiConfig.apiKey)"
+        let requestURL = URL(string: urlString)!
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = "DELETE"
+        
+        let (_, response) = try await URLSession.shared.data(for: request)
+        //debugPrint(response)
+
+        // Guard cluase (조건에 맞지 않으면 바로 return (여기서는 throw)) 사용
+        guard let httpResponse = response
+                as? HTTPURLResponse,
+                httpResponse.statusCode == 204
+        else {
+            throw URLError(.badServerResponse)
+        }
+    }
 }

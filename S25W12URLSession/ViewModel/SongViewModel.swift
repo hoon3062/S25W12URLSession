@@ -33,4 +33,16 @@ final class SongViewModel {
             debugPrint("에러 발생: \(error)")
         }
     }
+    
+    func deleteSong(_ song: Song) async {
+        do {
+            try await repository.deleteSong(song.id.uuidString)
+            if let index = _songs.firstIndex(where: { $0.id == song.id }) {
+                _songs.remove(at: index)
+            }
+        }
+        catch {
+            debugPrint("에러 발생: \(error)")
+        }
+    }
 }

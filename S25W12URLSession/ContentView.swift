@@ -48,28 +48,61 @@ struct SongView: View {
     }
 }
 
+//struct SongListView: View {
+//    let viewModel: SongViewModel
+//    
+//    var body: some View {
+//        List(viewModel.songs) { song in
+//            NavigationLink(value: song) {
+//                HStack {
+//                    VStack(alignment: .leading) {
+//                        Text(song.title)
+//                            .font(.headline)
+//                        Text(song.singer)
+//                            .font(.subheadline)
+//                            .foregroundColor(.gray)
+//                    }
+//                }
+//            }
+//        }
+////        .task {
+////            await viewModel.addSong(
+////                Song(id: UUID(), title: "test", singer: "singer", rating: 1, lyrics: "lyrics")
+////            )
+////        }
+//    }
+//}
+
 struct SongListView: View {
     let viewModel: SongViewModel
     
+    func deleteSong(offsets: IndexSet) {
+        Task {
+            for index in offsets {
+                let song = viewModel.songs[index]
+                await viewModel.deleteSong(song)
+            }
+        }
+    }
+    
     var body: some View {
-        List(viewModel.songs) { song in
-            NavigationLink(value: song) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(song.title)
-                            .font(.headline)
-                        Text(song.singer)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+//        List(viewModel.songs) { song in
+        List {
+            ForEach(viewModel.songs) { song in
+                NavigationLink(value: song) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(song.title)
+                                .font(.headline)
+                            Text(song.singer)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
             }
+            .onDelete(perform: deleteSong)
         }
-//        .task {
-//            await viewModel.addSong(
-//                Song(id: UUID(), title: "test", singer: "singer", rating: 1, lyrics: "lyrics")
-//            )
-//        }
     }
 }
 
